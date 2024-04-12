@@ -13,6 +13,21 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from datetime import datetime
 from io import BytesIO
+import time
+
+
+
+st.session_state['tutorial'] = False
+
+TUTORIAL = """
+Welcome to the **:violet[Nottingham Trent Portfolio Analyser]**, input any stock tickers you want to analyse and the start and end date of the analysis.
+This only works for US stocks and the tickers should be in the format of the stock exchange followed by the stock ticker e.g. "AAPL" for Apple Inc.
+"""
+
+def stream_data():
+    for word in TUTORIAL.split(" "):
+        yield word + " "
+        time.sleep(0.03)
 
 def plot_cum_returns(data, title):    
 	daily_cum_returns = 1 + data.dropna().pct_change()
@@ -41,8 +56,23 @@ def plot_efficient_frontier_and_max_sharpe(mu, S):
 	ax.legend()
 	return fig
 
-st.set_page_config(page_title = "Bohmian's Stock Portfolio Optimizer", layout = "wide")
-st.header("Bohmian's Stock Portfolio Optimizer")
+purple = '''
+<style>
+    body {
+    background-color: #800080;
+    }
+</style>
+'''
+
+st.set_page_config(page_title = "Stock Portfolio Optimizer", layout = "wide", page_icon=":chart:")
+
+st.markdown(purple, unsafe_allow_html=True)
+
+st.header("Stock Portfolio Optimizer")
+if st.button("How does it work?"):
+	st.balloons()
+	st.write(stream_data())
+
 
 col1, col2 = st.columns(2)
 
